@@ -9,7 +9,7 @@ from sqlalchemy.dialects.postgresql import UUID as PGUUID
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
-Base = declarative_base()
+from core.database import Base
 
 
 
@@ -33,7 +33,8 @@ class Project(Base):
     deadline = Column(DateTime(timezone=True), nullable=False)
 
     creator = relationship("User", back_populates="projects")
-    teams = relationship("Team", back_populates="project")
+    team = relationship("Team", back_populates="projects")
+    tasks = relationship("Task", back_populates="project")
 
 
 
@@ -63,10 +64,10 @@ class Team(Base):
     id = Column(PGUUID(as_uuid=True), primary_key=True, default=uuid4)
     name = Column(String(255), nullable=False)
     description = Column(Text, nullable=True)
-    project_id = Column(PGUUID(as_uuid=True), ForeignKey("projects.id"), nullable=False)
+    # project_id = Column(PGUUID(as_uuid=True), ForeignKey("projects.id"), nullable=False)
     created_by = Column(PGUUID(as_uuid=True), ForeignKey("users.id"), nullable=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
 
-    project = relationship("Project", back_populates="teams")
+    projects = relationship("Project", back_populates="team")
     creator = relationship("User", foreign_keys=[created_by])
     members = relationship("User", secondary=team_members, backref="teams")

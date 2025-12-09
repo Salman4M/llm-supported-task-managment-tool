@@ -1,6 +1,7 @@
 from datetime import datetime
 from typing import Optional
 from uuid import UUID, uuid4
+from core.database import Base
 
 from sqlalchemy import Column, DateTime, String, Enum as SQLEnum
 from sqlalchemy.dialects.postgresql import UUID as PGUUID
@@ -8,7 +9,6 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship
 from users.utils.enum import UserRole
-Base = declarative_base()
 
 
 class User(Base):

@@ -7,7 +7,8 @@ from sqlalchemy import Column, DateTime, String, Enum as SQLEnum
 from sqlalchemy.dialects.postgresql import UUID as PGUUID
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.sql import func
-from users.utils import UserRole
+from sqlalchemy.orm import relationship
+from users.utils.enum import UserRole
 Base = declarative_base()
 
 
@@ -23,5 +24,8 @@ class User(Base):
     role = Column(SQLEnum(UserRole), nullable=False, default=UserRole.project_owner)
     specialty = Column(String(255), nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+
+    projects = relationship("Project", back_populates="creator")
+    tasks = relationship("Task", back_populates="assigned_user")
 
 

@@ -2,14 +2,14 @@ from datetime import datetime
 from typing import Optional
 from uuid import UUID, uuid4
 
-from projects.utils import ProjectStatus
+from projects.utils.enum import ProjectStatus
 
 from pydantic import BaseModel, EmailStr, Field, ConfigDict
-from sqlalchemy import Column, DateTime, String, Enum,Table as SQLEnum
+from sqlalchemy import Column, DateTime, String, Text, Integer, Table, ForeignKey, Enum as SQLEnum
 from sqlalchemy.dialects.postgresql import UUID as PGUUID
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
-from users.utils import UserRole
 Base = declarative_base()
 
 
@@ -28,7 +28,7 @@ class Project(Base):
     name = Column(String(255), nullable=False)
     description = Column(Text, nullable=True)
     team_id = Column(PGUUID(as_uuid=True), ForeignKey("teams.id"), nullable=False)    
-    status = Column(SQLEnum(ProcessLookupError),nullable=False, default=ProcessLookupError.to_do)
+    status = Column(SQLEnum(ProjectStatus),nullable=False, default=ProjectStatus.to_do)
     created_by = Column(PGUUID(as_uuid=True), ForeignKey("users.id"), nullable=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     deadline = Column(DateTime(timezone=True), nullable=False)
@@ -49,7 +49,7 @@ class Task(Base):
     description = Column(Text, nullable=True)
     assigned_to = Column(PGUUID(as_uuid=True), ForeignKey("users.id"), nullable=True)
     project_id = Column(PGUUID(as_uuid=True), ForeignKey("projects.id"), nullable=False)
-    status = Column(SQLEnum(TaskStatus), nullable=False, default=TaskStatus.todo)
+    status = Column(SQLEnum(ProjectStatus), nullable=False, default=ProjectStatus.to_do)
     deadline = Column(DateTime(timezone=True), nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
 

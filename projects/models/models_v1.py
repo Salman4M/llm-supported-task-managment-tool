@@ -4,7 +4,6 @@ from uuid import UUID, uuid4
 
 from projects.utils.enum import ProjectStatus
 
-from pydantic import BaseModel, EmailStr, Field, ConfigDict
 from sqlalchemy import Column, DateTime, String, Text, Integer, Table, ForeignKey, Enum as SQLEnum
 from sqlalchemy.dialects.postgresql import UUID as PGUUID
 from sqlalchemy.ext.declarative import declarative_base
@@ -33,7 +32,6 @@ class Project(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     deadline = Column(DateTime(timezone=True), nullable=False)
 
-    # Relationships
     creator = relationship("User", back_populates="projects")
     teams = relationship("Team", back_populates="project")
 
@@ -53,14 +51,12 @@ class Task(Base):
     deadline = Column(DateTime(timezone=True), nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
 
-    # Relationships
     parent = relationship("Task", remote_side=[id], backref="subtasks")
     assigned_user = relationship("User", back_populates="tasks")
     project = relationship("Project", back_populates="tasks")
 
 
 
-# SQLAlchemy Model
 class Team(Base):
     __tablename__ = "teams"
 
@@ -71,7 +67,6 @@ class Team(Base):
     created_by = Column(PGUUID(as_uuid=True), ForeignKey("users.id"), nullable=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
 
-    # Relationships
     project = relationship("Project", back_populates="teams")
     creator = relationship("User", foreign_keys=[created_by])
     members = relationship("User", secondary=team_members, backref="teams")

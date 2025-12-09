@@ -2,7 +2,6 @@ from datetime import datetime
 from typing import Optional
 from uuid import UUID, uuid4
 
-from pydantic import BaseModel, EmailStr, Field, ConfigDict
 from sqlalchemy import Column, DateTime, String, Enum as SQLEnum
 from sqlalchemy.dialects.postgresql import UUID as PGUUID
 from sqlalchemy.ext.declarative import declarative_base
@@ -12,8 +11,6 @@ from users.utils.enum import UserRole
 Base = declarative_base()
 
 
-
-# SQLAlchemy Model
 class User(Base):
     __tablename__ = "users"
 

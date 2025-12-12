@@ -2,9 +2,9 @@ from datetime import datetime
 from typing import Optional
 from uuid import UUID, uuid4
 
-from projects.utils.enum import ProjectStatus
+from projects.utils.enum import Status
 
-from sqlalchemy import Column, DateTime, String, Text, Integer, Table, ForeignKey, Enum as SQLEnum
+from sqlalchemy import Column, DateTime, String, Text,Boolean, Integer, Table, ForeignKey, Enum as SQLEnum
 from sqlalchemy.dialects.postgresql import UUID as PGUUID
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
@@ -26,11 +26,12 @@ class Project(Base):
     id = Column(PGUUID(as_uuid=True), primary_key=True, default=uuid4)
     name = Column(String(255), nullable=False)
     description = Column(Text, nullable=True)
-    team_id = Column(PGUUID(as_uuid=True), ForeignKey("teams.id"), nullable=False)    
-    status = Column(SQLEnum(ProjectStatus),nullable=False, default=ProjectStatus.to_do)
+    team_id = Column(PGUUID(as_uuid=True), ForeignKey("teams.id"), nullable=True)    
+    status = Column(SQLEnum(Status),nullable=False, default=Status.to_do)
     created_by = Column(PGUUID(as_uuid=True), ForeignKey("users.id"), nullable=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     deadline = Column(DateTime(timezone=True), nullable=False)
+    is_active = Column((Boolean),default = True)
 
     creator = relationship("User", back_populates="projects")
     team = relationship("Team", back_populates="projects")
@@ -48,7 +49,7 @@ class Task(Base):
     description = Column(Text, nullable=True)
     assigned_to = Column(PGUUID(as_uuid=True), ForeignKey("users.id"), nullable=True)
     project_id = Column(PGUUID(as_uuid=True), ForeignKey("projects.id"), nullable=False)
-    status = Column(SQLEnum(ProjectStatus), nullable=False, default=ProjectStatus.to_do)
+    status = Column(SQLEnum(Status), nullable=False, default=Status.to_do)
     deadline = Column(DateTime(timezone=True), nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
 
@@ -64,7 +65,6 @@ class Team(Base):
     id = Column(PGUUID(as_uuid=True), primary_key=True, default=uuid4)
     name = Column(String(255), nullable=False)
     description = Column(Text, nullable=True)
-    # project_id = Column(PGUUID(as_uuid=True), ForeignKey("projects.id"), nullable=False)
     created_by = Column(PGUUID(as_uuid=True), ForeignKey("users.id"), nullable=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
 

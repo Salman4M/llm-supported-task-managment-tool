@@ -2,7 +2,7 @@
 from enum import Enum
 
 
-class ProjectStatus(str, Enum):
+class Status(str, Enum):
     to_do = "to_do"
     in_progress = "in_progress"
     review = "review"

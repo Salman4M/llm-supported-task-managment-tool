@@ -14,3 +14,27 @@ dependencies = [
     "sqlalchemy>=2.0.44",
     "uvicorn>=0.38.0",
 ]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.14.9",
+]
+
+
+[tool.ruff]
+target-version = "py312"
+
+[tool.ruff.lint]
+# to enable specific rules
+# E = pycodestyle errors (formatting)
+# F = Pyflakes (bugs like unused variables)
+# I = isort (sorting imports automatically)
+# B = flake8-bugbear (common bugs)
+select = ["E", "F", "I", "B"]
+
+#to ignore specific rules if they are annoying
+ignore = []
+
+[tool.ruff.format]
+Use double quotes for strings
+quote-style = "double"

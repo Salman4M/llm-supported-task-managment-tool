@@ -1,3 +1,3 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter
 
-router = APIRouter(prefix="/api" , tags = ["Reports"])
+router = APIRouter(prefix="/api", tags=["Reports"])

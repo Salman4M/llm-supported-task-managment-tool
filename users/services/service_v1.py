@@ -59,7 +59,7 @@ class UserService:
             raise HTTPException(401,"refresh token revoked")
         
         try:
-            payload = jwt.decode(refresh_token,settings.SECRET_KEY,algorithms=[settings.JWT_ALGORITHM])
+            payload = jwt.decode(refresh_token,settings.JWT_SECRET,algorithms=[settings.JWT_ALGORITHM])
             user_id = payload.get("sub")
             if not user_id or payload.get("type") != "refresh":
                 raise HTTPException(401,"Invalid token type")

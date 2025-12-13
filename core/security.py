@@ -24,7 +24,7 @@ def get_password_hash(password: str):
 def create_token(subject: Union[str, Any], expires_delta: timedelta, type: str) -> str:
     expire = datetime.now(timezone.utc) + expires_delta
     to_encode = {"exp": expire, "sub": str(subject), "type": type}
-    return jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.JWT_ALGORITHM)
+    return jwt.encode(to_encode, settings.JWT_SECRET, algorithm=settings.JWT_ALGORITHM)
 
 
 def create_access_token(subject: Any) -> str:

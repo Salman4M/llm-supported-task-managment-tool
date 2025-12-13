@@ -16,7 +16,7 @@ class User(Base):
     email = Column(String(255), unique=True, nullable=False, index=True)
     password = Column(String(255), nullable=False)  # Store hashed password
     role = Column(SQLEnum(UserRole), nullable=True, default=UserRole.project_owner)
-    created_by = Column(Integer, ForeignKey("user.id"), nullable=True)
+    created_by = Column(PGUUID(as_uuid=True), ForeignKey("users.id"), nullable=True)
     specialty = Column(String(255), nullable=True)
     created_at = Column(
         DateTime(timezone=True), server_default=func.now(), nullable=False
@@ -25,3 +25,6 @@ class User(Base):
     projects = relationship("Project", back_populates="creator")
     tasks = relationship("Task", back_populates="assigned_user")
     parent = relationship("User", remote_side=[id], backref="members")
+
+
+

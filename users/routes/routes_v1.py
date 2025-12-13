@@ -1,17 +1,13 @@
-from schemas.schemas_v1 import RegisterSchema, LoginSchema
 from sqlalchemy.orm import Session
 from fastapi import APIRouter, Depends,Body,Request
 from core.config import settings
 from core.authentication import oauth2_scheme
 from core.database import get_db
-from core.security import create_access_token, create_refresh_token
 from users.schemas.schemas_v1  import RegisterSchema, LoginSchema, TokenSchema
 from users.services.service_v1 import user_service
 
 
 router = APIRouter(prefix="/api", tags=["Users"])
-
-
 
 @router.post('/register')
 def register(user_in: RegisterSchema, db: Session = Depends(get_db)):
@@ -32,7 +28,7 @@ async def refresh(
 @router.post("/logout")
 async def logout(
     request: Request,
-    token: str = Depends(oauth2_scheme) # Gets the Access Token
+    token: str = Depends(oauth2_scheme) 
 ):
     # Try to get refresh token from body if sent
     body = await request.json()

@@ -11,6 +11,10 @@ sys.path.append(os.getcwd())
 from core.database import Base
 from core.config import settings
 
+from users.models.models_v1 import User
+from projects.models.models_v1 import Project, Task, Team
+from reports.models.models_v1 import UserReport, LLMReport
+
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config

@@ -30,7 +30,7 @@ async def get_current_user(
     except JWTError:
         raise credentical_exception
     
-    user = user_repo.get_by_email(db, user_id=user_id)
+    user = user_repo.get_by_id(db, user_id=user_id)
     if user is None:
         raise credentical_exception
     

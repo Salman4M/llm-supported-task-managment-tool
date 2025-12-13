@@ -24,14 +24,14 @@ def get_password_hash(password: str):
 def create_token(subject: Union[str, Any], expires_delta: timedelta, type: str) -> str:
     expire = datetime.now(timezone.utc) + expires_delta
     to_encode = {"exp": expire, "sub": str(subject), "type": type}
-    return jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
+    return jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.JWT_ALGORITHM)
 
 
 def create_access_token(subject: Any) -> str:
     return create_token(subject, timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES), "access")
 
 def create_refresh_token(subject: Any) -> str:
-    return create_token(subject, timedelta(days=settings.REFRESH_TOKEN_EXPIRE_DAYS), "refresh")
+    return create_token(subject, timedelta(days=settings.REFRESH_TOKEN_LIFETIME_DAYS), "refresh")
 
 
 # --- Blocklist Logic ---

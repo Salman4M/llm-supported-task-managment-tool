@@ -1,5 +1,6 @@
 .venv/
 __init__.*
 __pycache__/
-env
+.ruff_cache/
+.env
 uv.lock

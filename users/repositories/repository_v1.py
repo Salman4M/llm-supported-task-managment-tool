@@ -16,6 +16,14 @@ class UserRepository:
         db.refresh(new_user)
         return new_user
     
+    def update_password(self,db:Session,user_id: str, hashed_password: str):
+        user = self.get_by_id(db,user_id)
+        if user:
+            user.password = hashed_password
+            db.add(user)
+            db.commit()
+            db.refresh(user)
+        return user
 
 user_repo = UserRepository()
 

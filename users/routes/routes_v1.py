@@ -1,9 +1,10 @@
 from sqlalchemy.orm import Session
+from models.models_v1 import User
 from fastapi import APIRouter, Depends,Body,Request
 from core.config import settings
-from core.authentication import oauth2_scheme
+from core.authentication import oauth2_scheme,get_current_user
 from core.database import get_db
-from users.schemas.schemas_v1  import RegisterSchema, LoginSchema, TokenSchema
+from users.schemas.schemas_v1  import RegisterSchema, LoginSchema, TokenSchema,ChangePasswordSchema
 from users.services.service_v1 import user_service
 
 
@@ -35,3 +36,13 @@ async def logout(
     refresh_token = body.get("refresh_token")
     
     return await user_service.logout_user(token, refresh_token)
+
+
+@router.patch("/change/password")
+async def change_password(
+    password_in: ChangePasswordSchema,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user())
+    ):
+
+    return user_service.change_password(db, current_user.id, password_in)

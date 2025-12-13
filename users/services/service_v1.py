@@ -1,8 +1,8 @@
 from sqlalchemy.orm import Session
-from fastapi import HTTPException, status
+from fastapi import HTTPException, status,Body
 
 from users.repositories.repository_v1 import user_repo
-from users.schemas.schemas_v1 import RegisterSchema,LoginSchema
+from users.schemas.schemas_v1 import RegisterSchema,LoginSchema,ChangePasswordSchema
 from passlib.context import CryptContext
 from jose import jwt,JWTError
 from core.config import settings
@@ -74,6 +74,18 @@ class UserService:
         except JWTError:
             raise HTTPException(401,"Invalid refresh token")
 
+    def change_password(self, db: Session,user_id: str, schema: ChangePasswordSchema):
+        user = user_repo.get_by_id(db,user_id)
+
+        if not user or not verify_password(schema.old_password,user.password):
+            raise HTTPException(
+                401,
+                "Incorrect old password"
+            )
+        new_hash = get_password_hash(schema.new_password)
+        user_repo.update_password(db,user_id,new_hash)
+        
+        return {"message":"password updated successfully"}
         
 
 user_service = UserService()

@@ -1,10 +1,12 @@
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
-
+from typing import Optional
+from users.models.models_v1 import User
 from users.repositories.repository_v1 import user_repo
 from users.schemas.schemas_v1 import RegisterSchema,LoginSchema,ChangePasswordSchema
 from passlib.context import CryptContext
 from jose import jwt,JWTError
+from users.utils.enum import UserRole
 from core.config import settings
 
 
@@ -20,14 +22,25 @@ from core.security import (
 pwd_content = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 class UserService:
-    def register_user(self,db: Session, schema: RegisterSchema):
+    def register_user(self,db: Session, schema: RegisterSchema,current_user: Optional[User] = None):
         if user_repo.get_by_email(db, schema.email):
             raise HTTPException(
                 400,
                 "email already registered"
             )
-        
         user_dict = schema.model_dump(exclude = {"confirm_password"})
+
+        if current_user:
+            current_user = user_repo.get_by_id(db,current_user.id)
+            if current_user.role!='project_owner':
+                raise HTTPException(
+                    401,
+                    "Only Project Owner can create new members"
+                )
+            user_dict['created_by'] = current_user.id
+        else:
+            pass
+            
         user_dict["password"] = get_password_hash(user_dict["password"])
 
         return user_repo.create(db, user_dict)
@@ -91,13 +104,18 @@ class UserService:
     def delete_user(self, db: Session, current_user_id :str, deleted_user_id: str):
         current_user = user_repo.get_by_id(db,current_user_id)
         deleted_user = user_repo.get_by_id(db,deleted_user_id)
-        if current_user.role != 'project_owner' or deleted_user.created_by != current_user:
+        if current_user.role != 'project_owner' or deleted_user.created_by != current_user.id:
             raise HTTPException(
                 401,
                 "You are not allowed to delete user"
             )
-        user_repo.delete(deleted_user_id)
+        user_repo.delete(db,deleted_user_id)
         return {"message":"User deleted successfully"}
 
+    def get_my_members(self, db: Session, current_user_id:str):
+        return user_repo.get_users(db,current_user_id)
+
+    def get_project_owners(self,db:Session):
+        return user_repo.get_pos(db)
 
 user_service = UserService()

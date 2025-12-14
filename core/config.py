@@ -11,7 +11,9 @@ class Settings(BaseSettings):
     HEADER: str = "Bearer"
     REFRESH_TOKEN_LIFETIME_DAYS: int = 7
     REDIS_PORT: int = 6379
-    REDIS_HOST: str = "redis_service"
+    REDIS_HOST: str = "localhost"
+    # REDIS_HOST: str = "redis_service"
+
 
     class Config:
         env_file = ".env"

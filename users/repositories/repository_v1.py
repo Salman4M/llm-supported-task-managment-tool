@@ -9,8 +9,11 @@ class UserRepository:
     def get_by_id(self, db: Session, user_id: str):
         return db.query(User).filter(User.id == user_id).first()
     
-    def get_users(self,db: Session):
-        return db.query(User).filter(User.role!='product_owner').all()
+    def get_users(self,db: Session,creator_id):
+        return db.query(User).filter(User.created_by==creator_id).all()
+    
+    def get_pos(self,db: Session):
+        return db.query(User).filter(User.role=='project_owner').all()
 
     def create(self, db: Session,user_data: dict):
         new_user = User(**user_data)
@@ -20,7 +23,9 @@ class UserRepository:
         return new_user
     
     def delete(self, db:Session, user_id: str):
-        return db.query(User).filter(User.id==user_id).delete()
+        result = db.query(User).filter(User.id==user_id).delete()
+        db.commit()
+        return result
 
     def update_password(self,db:Session,user_id: str, hashed_password: str):
         user = self.get_by_id(db,user_id)

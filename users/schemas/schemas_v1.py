@@ -1,11 +1,8 @@
 #schemas
 from users.utils.enum import UserRole
-from sqlalchemy.dialects.postgresql import UUID as PGUUID
-from pydantic import BaseModel,field_validator ,Field,EmailStr, model_validator
-from typing import Optional,List
+from pydantic import BaseModel,Field,EmailStr, model_validator
+from typing import Optional
 from datetime import datetime
-from users.models.models_v1 import User
-import bcrypt
 import uuid
 
 class RegisterSchema(BaseModel):
@@ -48,6 +45,3 @@ class ChangePasswordSchema(BaseModel):
             raise ValueError("New passwords don't match")
         return self
     
-
-class DeleteUserSchema(BaseModel):
-    member_id: str

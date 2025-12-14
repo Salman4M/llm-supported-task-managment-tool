@@ -1,7 +1,7 @@
 from uuid import uuid4
 from core.database import Base
 
-from sqlalchemy import Column, DateTime, String, ForeignKey, Integer, Enum as SQLEnum
+from sqlalchemy import Column, DateTime, String, ForeignKey, Enum as SQLEnum
 from sqlalchemy.dialects.postgresql import UUID as PGUUID
 from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship

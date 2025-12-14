@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from fastapi import HTTPException, status,Body
+from fastapi import HTTPException
 
 from users.repositories.repository_v1 import user_repo
 from users.schemas.schemas_v1 import RegisterSchema,LoginSchema,ChangePasswordSchema

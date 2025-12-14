@@ -1,7 +1,6 @@
 from sqlalchemy.orm import Session
 from models.models_v1 import User
 from fastapi import APIRouter, Depends,Body,Request
-from core.config import settings
 from core.authentication import oauth2_scheme,get_current_user
 from core.database import get_db
 from users.schemas.schemas_v1  import RegisterSchema, LoginSchema, TokenSchema,ChangePasswordSchema

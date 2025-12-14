@@ -1,10 +1,8 @@
 from core.config import settings
 from typing import Union,Any
 from datetime import datetime,timezone,timedelta
-from jose import jwt, JWTError
+from jose import jwt
 from passlib.context import CryptContext
-from requests import Request
-from fastapi import HTTPException
 import redis.asyncio as redis
 
 redis_client = redis.Redis(
@@ -36,7 +34,6 @@ def create_refresh_token(subject: Any) -> str:
 
 # --- Blocklist Logic ---
 async def add_to_blacklist(token: str, expires_in: int = 86400):
-    # Store token in Redis with an expiration (so Redis doesn't fill up forever)
     await redis_client.set(f"bl:{token}", "true", ex=expires_in)
 
 async def is_token_blacklisted(token: str) -> bool:

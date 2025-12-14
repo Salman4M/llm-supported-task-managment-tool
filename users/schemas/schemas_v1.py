@@ -47,3 +47,7 @@ class ChangePasswordSchema(BaseModel):
         if self.new_password != self.confirm_password:
             raise ValueError("New passwords don't match")
         return self
+    
+
+class DeleteUserSchema(BaseModel):
+    member_id: str

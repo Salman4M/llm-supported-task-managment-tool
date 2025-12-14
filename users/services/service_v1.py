@@ -86,6 +86,18 @@ class UserService:
         user_repo.update_password(db,user_id,new_hash)
         
         return {"message":"password updated successfully"}
-        
+    
+
+    def delete_user(self, db: Session, current_user_id :str, deleted_user_id: str):
+        current_user = user_repo.get_by_id(db,current_user_id)
+        deleted_user = user_repo.get_by_id(db,deleted_user_id)
+        if current_user.role != 'project_owner' or deleted_user.created_by != current_user:
+            raise HTTPException(
+                401,
+                "You are not allowed to delete user"
+            )
+        user_repo.delete(deleted_user_id)
+        return {"message":"User deleted successfully"}
+
 
 user_service = UserService()

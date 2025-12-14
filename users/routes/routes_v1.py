@@ -46,3 +46,12 @@ async def change_password(
     ):
 
     return user_service.change_password(db, current_user.id, password_in)
+
+@router.delete("/delete/user")
+async def delete_user(
+    user_id: str,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user())
+    ):
+    return user_service.delete_user(db,current_user.id, user_id)
+    

@@ -11,7 +11,7 @@ class RegisterSchema(BaseModel):
     password: str
     confirm_password: str = Field(nullable = False)
     role: UserRole = UserRole.project_owner
-    created_by: uuid.UUID
+    created_by: Optional[uuid.UUID] = None
     specialty: str
     created_at: Optional[datetime] = None
     

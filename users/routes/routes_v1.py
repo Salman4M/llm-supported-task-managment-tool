@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from models.models_v1 import User
+from users.models.models_v1 import User
 from fastapi import APIRouter, Depends,Body,Request
 from core.authentication import oauth2_scheme,get_current_user
 from core.database import get_db
@@ -41,7 +41,7 @@ async def logout(
 async def change_password(
     password_in: ChangePasswordSchema,
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user())
+    current_user: User = Depends(get_current_user)
     ):
 
     return user_service.change_password(db, current_user.id, password_in)
@@ -50,7 +50,7 @@ async def change_password(
 async def delete_user(
     user_id: str,
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user())
+    current_user: User = Depends(get_current_user)
     ):
     return user_service.delete_user(db,current_user.id, user_id)
     

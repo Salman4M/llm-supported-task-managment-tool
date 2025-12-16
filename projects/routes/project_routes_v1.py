@@ -9,7 +9,7 @@ from core.database import SessionLocal
 
 from users.models.models_v1 import User
 from users.utils.enum import UserRole
-from models.models_v1 import Project
+from projects.models.models_v1 import Project
 from projects.schemas.project_schemas_v1 import *
 from projects.repositories.project_repositories_v1 import ProjectRepository
 

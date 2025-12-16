@@ -5,7 +5,7 @@ from fastapi import HTTPException
 from .base import BaseRepository
 
 from models.models_v1 import Project 
-from schemas.schemas_v1 import ProjectCreateSchema, ProjectUpdateSchema
+from projects.schemas.project_schemas_v1 import ProjectCreateSchema, ProjectUpdateSchema
 
 
 class ProjectRepository(BaseRepository[Project]):

@@ -7,12 +7,17 @@ requires-python = ">=3.13"
 dependencies = [
     "alembic>=1.17.2",
     "fastapi[standard]>=0.124.0",
-    "jwt>=1.4.0",
-    "pydantic>=2.12.5",
+    "pydantic[email]>=2.12.5",
     "pydantic-settings>=2.12.0",
     "python-dotenv>=1.2.1",
     "sqlalchemy>=2.0.44",
     "uvicorn>=0.38.0",
+    "passlib[bcrypt]>=1.7.4",
+    "requests>=2.32.5",
+    "redis>=7.1.0",
+    "psycopg[binary]>=3.3.2",
+    "python-jose[cryptography]>=3.5.0",
+    "bcrypt==3.2.2",
 ]
 
 [dependency-groups]
@@ -24,17 +29,17 @@ dev = [
 [tool.ruff]
 target-version = "py312"
 
-[tool.ruff.lint]
+#[tool.ruff.lint]
 # to enable specific rules
 # E = pycodestyle errors (formatting)
 # F = Pyflakes (bugs like unused variables)
 # I = isort (sorting imports automatically)
 # B = flake8-bugbear (common bugs)
-select = ["E", "F", "I", "B"]
+#select = ["E", "F", "I", "B"]
 
 #to ignore specific rules if they are annoying
-ignore = []
+lint.ignore = []
 
-[tool.ruff.format]
-Use double quotes for strings
-quote-style = "double"
+#[tool.ruff.format]
+#Use double quotes for strings
+#quote-style = "double"

@@ -5,6 +5,10 @@ from projects.routes.routes_v1 import router as projects_router
 from reports.routes.routes_v1 import router as reports_router
 
 
+from users.models import models_v1
+from projects.models import models_v1
+from reports.models import models_v1
+
 app = FastAPI(title="LLM Task Manager")
 
 

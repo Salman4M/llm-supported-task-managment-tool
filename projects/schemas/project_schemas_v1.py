@@ -2,7 +2,7 @@ from pydantic import BaseModel
 from uuid import UUID
 from datetime import datetime
 from enum import Enum
-
+from typing import Optional
 from projects.utils.enum import Status
 
 
@@ -36,7 +36,7 @@ class ProjectDetailSchema(BaseModel):
 class ProjectCreateSchema(BaseModel):
     name: str
     description: str | None
-    team_id: UUID | None
+    team_id: Optional[UUID] = None
     deadline: datetime
 
 

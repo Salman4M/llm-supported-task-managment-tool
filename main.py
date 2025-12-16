@@ -1,7 +1,7 @@
 import uvicorn
 from fastapi import FastAPI
 from users.routes.routes_v1 import router as users_router
-from projects.routes.routes_v1 import router as projects_router
+from projects.routes.project_routes_v1 import router as projects_router
 from reports.routes.routes_v1 import router as reports_router
 
 

@@ -4,8 +4,8 @@ from uuid import UUID
 from fastapi import HTTPException
 from .base import BaseRepository
 
-from projects.models.models_v1 import Project 
-from projects.schemas.schemas_v1 import ProjectCreateSchema, ProjectUpdateSchema
+from models.models_v1 import Project 
+from projects.schemas.project_schemas_v1 import ProjectCreateSchema, ProjectUpdateSchema
 
 
 class ProjectRepository(BaseRepository[Project]):

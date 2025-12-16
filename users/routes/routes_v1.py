@@ -30,6 +30,7 @@ def create_team_member(
 async def login(user_in: LoginSchema,db:Session = Depends(get_db)):
     return user_service.login_user(db, user_in)
 
+
 @router.post("/refresh", response_model=TokenSchema)
 async def refresh(
     refresh_token: str = Body(..., embed=True), 
@@ -80,6 +81,7 @@ async def get_members(
     current_user: User = Depends(get_current_user),
 ):
     return user_service.get_my_members(db,current_user.id)
+
 
 @router.get("/my-pos",response_model = List[UserSchema])
 async def get_pos(

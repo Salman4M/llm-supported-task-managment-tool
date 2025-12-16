@@ -3,7 +3,7 @@ from uuid import UUID
 from datetime import datetime
 from enum import Enum
 
-from utils.enum import Status
+from projects.utils.enum import Status
 
 
 class ProjectSchema(BaseModel):

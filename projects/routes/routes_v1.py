@@ -9,12 +9,12 @@ from core.database import SessionLocal
 
 from users.models.models_v1 import User
 from users.utils.enum import UserRole
-from models.models_v1 import Project
-from schemas.schemas_v1 import *
-from repositories.repositories_v1 import ProjectRepository
+from projects.models.models_v1 import Project
+from projects.schemas.schemas_v1 import *
+from projects.repositories.repositories_v1 import ProjectRepository
+from core.authentication import get_current_user
 
-
-router = APIRouter(prefix='/api')
+router = APIRouter(prefix='/api', tags=["Projects"])
 
 # Project endpoints
 @router.get('/projects/', response_model=list[ProjectSchema], status_code=status.HTTP_200_OK)

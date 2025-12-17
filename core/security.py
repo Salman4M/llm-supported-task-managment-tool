@@ -3,13 +3,16 @@ from typing import Union,Any
 from datetime import datetime,timezone,timedelta
 from jose import jwt
 from passlib.context import CryptContext
-import redis.asyncio as redis
+# import redis.asyncio as redis
+from cachetools import TTLCache
 
-redis_client = redis.Redis(
-    host=settings.REDIS_HOST, 
-    port=settings.REDIS_PORT, 
-    decode_responses=True
-)
+# redis_client = redis.Redis(
+#     host=settings.REDIS_HOST, 
+#     port=settings.REDIS_PORT, 
+#     decode_responses=True
+# )
+
+BLACKLISTED_TOKENS = TTLCache(maxsize=10000, ttl=8*24*60*60)
 
 pwd_context = CryptContext(schemes=['bcrypt'], deprecated='auto')
 
@@ -33,10 +36,15 @@ def create_refresh_token(subject: Any) -> str:
 
 
 # --- Blocklist Logic ---
-async def add_to_blacklist(token: str, expires_in: int = 86400):
-    await redis_client.set(f"bl:{token}", "true", ex=expires_in)
+async def add_to_blacklist(token: str, expires_in: int = None):
+    BLACKLISTED_TOKENS[token] = True
 
 async def is_token_blacklisted(token: str) -> bool:
-    exists = await redis_client.get(f"bl:{token}")
-    return exists is not None
+    return token in BLACKLISTED_TOKENS
+
+def clear_blacklist():
+    BLACKLISTED_TOKENS.clear()
+
+def get_bloclisted_size():
+    return len(BLACKLISTED_TOKENS)
     

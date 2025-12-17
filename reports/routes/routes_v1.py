@@ -16,7 +16,7 @@ from core.authentication import get_current_user
 from users.models.models_v1 import User
 
 router = APIRouter(
-    prefix="/reports/",
+    prefix="/reports",
     tags=["Reports"]
 )
 

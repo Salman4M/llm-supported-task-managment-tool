@@ -9,7 +9,6 @@ from sqlalchemy import (
     Text,
     Boolean,
     Integer,
-    Table,
     ForeignKey,
     Enum as SQLEnum,
 )
@@ -17,14 +16,6 @@ from sqlalchemy.dialects.postgresql import UUID as PGUUID
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from core.database import Base
-
-
-team_members = Table(
-    "team_members",
-    Base.metadata,
-    Column("team_id", PGUUID(as_uuid=True), ForeignKey("teams.id"), primary_key=True),
-    Column("user_id", PGUUID(as_uuid=True), ForeignKey("users.id"), primary_key=True),
-)
 
 
 class Project(Base):

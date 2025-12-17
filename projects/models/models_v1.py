@@ -18,7 +18,6 @@ from sqlalchemy.sql import func
 from core.database import Base
 
 
-
 class Project(Base):
     __tablename__ = "projects"
 

@@ -9,7 +9,6 @@ from sqlalchemy import (
     Text,
     Boolean,
     Integer,
-    Table,
     ForeignKey,
     Enum as SQLEnum,
 )
@@ -17,15 +16,6 @@ from sqlalchemy.dialects.postgresql import UUID as PGUUID
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from core.database import Base
-
-
-team_members = Table(
-    "team_members",
-    Base.metadata,
-    Column("team_id", PGUUID(as_uuid=True), ForeignKey("teams.id"), primary_key=True),
-    Column("user_id", PGUUID(as_uuid=True), ForeignKey("users.id"), primary_key=True),
-)
-
 
 class Project(Base):
     __tablename__ = "projects"
@@ -65,19 +55,3 @@ class Task(Base):
     parent = relationship("Task", remote_side=[id], backref="subtasks")
     assigned_user = relationship("User", back_populates="tasks")
     project = relationship("Project", back_populates="tasks")
-
-
-# class Team(Base):
-#     __tablename__ = "teams"
-
-#     id = Column(PGUUID(as_uuid=True), primary_key=True, default=uuid4)
-#     name = Column(String(255), nullable=False)
-#     description = Column(Text, nullable=True)
-#     created_by = Column(PGUUID(as_uuid=True), ForeignKey("users.id"), nullable=False)
-#     created_at = Column(
-#         DateTime(timezone=True), server_default=func.now(), nullable=False
-#     )
-
-#     projects = relationship("Project", back_populates="team")
-#     creator = relationship("User", foreign_keys=[created_by])
-#     members = relationship("User", secondary=team_members, backref="teams")

@@ -1,8 +1,9 @@
 from uuid import UUID
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
+from sqlalchemy import delete
 
-from teams.models.models_v1 import Team
+from teams.models.models_v1 import Team, team_members
 from users.models.models_v1 import User
 from teams.schemas.schemas_v1 import TeamCreate, TeamUpdate
 
@@ -96,3 +97,28 @@ class TeamRepository:
 
     def get_user(self, db: Session, user_id: UUID):
         return db.query(User).filter(User.id == user_id).first()
+    
+    def get_by_id(self, db: Session, team_id: UUID) -> Team | None:
+        return db.query(Team).filter(Team.id == team_id).first()
+
+    def remove_member(self, db: Session, team_id: UUID, user_id: UUID):
+        member = (
+            db.query(team_members)
+            .filter(
+                team_members.c.team_id == team_id,
+                team_members.c.user_id == user_id
+            )
+            .first()
+        )
+
+        if not member:
+            return None  # və ya HTTPException 404
+
+        db.execute(
+            team_members.delete().where(
+                team_members.c.team_id == team_id,
+                team_members.c.user_id == user_id
+            )
+        )
+        db.commit()
+

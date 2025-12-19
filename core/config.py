@@ -10,8 +10,8 @@ class Settings(BaseSettings):
     JWT_ALGORITHM: str = "HS256"
     HEADER: str = "Bearer"
     REFRESH_TOKEN_LIFETIME_DAYS: int = 7
-    REDIS_PORT: int = 6379
-    REDIS_HOST: str = "localhost"
+    # REDIS_PORT: int = 6379
+    # REDIS_HOST: str = "localhost"
     # REDIS_HOST: str = "redis_service"
 
 

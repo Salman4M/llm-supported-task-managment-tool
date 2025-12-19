@@ -37,4 +37,4 @@ class Team(Base):
 
     projects = relationship("Project", back_populates="team")
     creator = relationship("User", foreign_keys=[created_by])
-    members = relationship("User", secondary=team_members, backref="teams")
+    team_members = relationship("User", secondary=team_members, backref="teams")

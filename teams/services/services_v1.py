@@ -86,5 +86,34 @@ class TeamService:
     def get_members(self, db, current_user, team_id):
         team = self.repo.get_members(db, team_id)
         return team
+    
+    def delete_member(self, db: Session, current_user: User, team_id: UUID, user_id: UUID):
+        team = self.repo.get_by_id(db, team_id)
+        if not team:
+            raise HTTPException(status_code=404, detail="Team not found")
+
+        members = self.repo.get_members(db, team_id)
+        member_ids = [member.id for member in members]
+
+        # Check if user is a member
+        if user_id not in member_ids:
+            raise HTTPException(status_code=404, detail="User is not a member of the team")
+
+        # Authorization
+        if current_user.role == UserRole.project_owner:
+            # PO can delete anyone
+            self.repo.remove_member(db, team_id, user_id)
+        elif current_user.role == UserRole.team_lead:
+            # Team Lead can delete only members (not PO, not other team leads)
+            user_to_delete = next((m for m in members if m.id == user_id), None)
+            if not user_to_delete:
+                raise HTTPException(status_code=404, detail="User not found in team")
+            if user_to_delete.role in [UserRole.project_owner, UserRole.team_lead]:
+                raise HTTPException(status_code=403, detail="Team Lead cannot remove this user")
+            self.repo.remove_member(db, team_id, user_id)
+        else:
+            raise HTTPException(status_code=403, detail="Not allowed to remove members")
+
+        return {"detail": "Member removed successfully"}
 
 

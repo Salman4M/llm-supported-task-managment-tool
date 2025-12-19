@@ -77,3 +77,17 @@ def get_team_members(
         current_user=current_user,
         team_id=team_id,
     )
+
+@router.delete("/{team_id}/members/{user_id}")
+def delete_team_member(
+    team_id: UUID,
+    user_id: UUID,
+    db: Session = Depends(get_db),
+    current_user=Depends(get_current_user),
+):
+    return service.delete_member(
+        db=db,
+        current_user=current_user,
+        team_id=team_id,
+        user_id=user_id,
+    )

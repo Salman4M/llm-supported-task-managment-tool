@@ -15,7 +15,7 @@ from projects.repositories.project_repositories_v1 import ProjectRepository
 from core.authentication import get_current_user
 
 
-router = APIRouter(prefix='/api')
+router = APIRouter(prefix='/api',tags=["Projects"])
 
 # Project endpoints
 @router.get('/projects/', response_model=list[ProjectSchema], status_code=status.HTTP_200_OK)

@@ -3,18 +3,12 @@ from sqlalchemy.orm import Session, joinedload
 from typing import Dict, Any
 from uuid import UUID
 
-from fastapi_mcp import MCPRouter
 from core.database import get_db
 from core.authentication import get_current_user
 from users.models.models_v1 import User
 from projects.models.models_v1 import Project, Task
 
 from llm.services.qwen_service_ollama import qwen_service
-
-mcp_router = MCPRouter(
-    name="project-status-analyzer",
-    version="1.0.0"
-)
 
 
 router = APIRouter(
@@ -23,7 +17,6 @@ router = APIRouter(
 )
 
 
-@mcp_router.tool()
 async def analyze_project_status(
     project_id: str,
     db: Session = Depends(get_db),
@@ -100,7 +93,6 @@ async def analyze_project_status(
     
     return analysis
 
-@mcp_router.tool()
 async def analyze_task_status(
     task_id: int,
     db: Session = Depends(get_db),
@@ -155,7 +147,6 @@ async def analyze_task_status(
     
     return analysis
 
-@mcp_router.tool()
 async def calculate_project_completion(
     project_id: str,
     db: Session = Depends(get_db)
@@ -223,7 +214,6 @@ async def calculate_project_completion(
     }
 
 
-@mcp_router.tool()
 async def update_project_status_intelligent(
     project_id: str,
     db: Session = Depends(get_db),

@@ -26,7 +26,6 @@ app.include_router(users_router, prefix="/users")
 app.include_router(projects_router, prefix="/projects")
 app.include_router(reports_router, prefix="/reports")
 app.include_router(teams_router, prefix="/teams")
-app.include_router(mcp_http_router, prefix="/mcp")
 
 mcp = FastApiMCP(
                 app,
@@ -36,11 +35,6 @@ mcp = FastApiMCP(
 
 #to mount mcp server to fastapi app
 mcp.mount_http()
-
-mcp.tool()(analyze_project_status)
-mcp.tool()(analyze_task_status)
-mcp.tool()(calculate_project_completion)
-mcp.tool()(update_project_status_intelligent)
 
 #for testing
 app.include_router(mcp_http_router)

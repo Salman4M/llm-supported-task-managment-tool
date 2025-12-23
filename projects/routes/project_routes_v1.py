@@ -15,19 +15,22 @@ from projects.repositories.project_repositories_v1 import ProjectRepository
 from core.authentication import get_current_user
 
 
-router = APIRouter(prefix='/api',tags=["Projects"])
+router = APIRouter(
+    prefix='/api',
+    tags=['Projects']
+)
 
 # Project endpoints
 @router.get('/projects/', response_model=list[ProjectSchema], status_code=status.HTTP_200_OK)
-def get_project_list(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+def get_project_list(skip: int = 0, limit: int = 100, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     repo = ProjectRepository(db)
-    return repo.get_active_projects(skip, limit)
+    return repo.get_active_projects(user_id=current_user.id, skip=skip, limit=limit)
 
 
 @router.get('/projects/{project_id}/', response_model=ProjectDetailSchema, status_code=status.HTTP_200_OK)
-def get_project_detail(project_id: UUID, db: Session = Depends(get_db)):
+def get_project_detail(project_id: UUID, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     repo = ProjectRepository(db)
-    project = repo.get_active_project(project_id)
+    project = repo.get_active_project(user_id=current_user.id, id=project_id) 
     return project
 
 
@@ -43,20 +46,20 @@ def create_project(project: ProjectCreateSchema, current_user: User = Depends(ge
 @router.patch("/projects/update/{project_id}/", response_model=ProjectDetailSchema, status_code=status.HTTP_200_OK)
 def update_project(project_id: UUID, project: ProjectUpdateSchema, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     repo = ProjectRepository(db)
-    db_project = repo.get_active_project(project_id)
+    db_project = repo.get_active_project(user_id=current_user.id, id=project_id)
     if not db_project:
         raise HTTPException(status_code=404, detail='Project not found')
     
     if current_user.role not in [UserRole.project_owner, UserRole.team_lead]:
         raise HTTPException(status_code=403, detail='You do not have permission')
     
-    return repo.update_project(project_id, project)
+    return repo.update_project(id=project_id, data=project)
 
 
 @router.delete("/projects/{project_id}/", status_code=status.HTTP_204_NO_CONTENT)
 def delete_project(project_id: UUID, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     repo = ProjectRepository(db)
-    project = repo.get_active_project(project_id)
+    project = repo.get_active_project(user_id=current_user.id, id=project_id)
     if project.created_by != current_user.id:
         raise HTTPException(status_code=403, detail='You do not have permission')
     

@@ -12,7 +12,8 @@ from core.database import Base
 from core.config import settings
 
 from users.models.models_v1 import User
-from projects.models.models_v1 import Project, Task, Team
+from projects.models.models_v1 import Project, Task
+from teams.models.models_v1 import Team
 from reports.models.models_v1 import UserReport, LLMReport
 
 

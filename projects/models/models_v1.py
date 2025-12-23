@@ -17,8 +17,6 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from core.database import Base
 
-
-
 class Project(Base):
     __tablename__ = "projects"
 
@@ -57,4 +55,3 @@ class Task(Base):
     parent = relationship("Task", remote_side=[id], backref="subtasks")
     assigned_user = relationship("User", back_populates="tasks")
     project = relationship("Project", back_populates="tasks")
-

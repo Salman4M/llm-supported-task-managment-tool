@@ -18,6 +18,8 @@ dependencies = [
     "python-jose[cryptography]>=3.5.0",
     "bcrypt==3.2.2",
     "cachetools>=6.2.4",
+    "fastapi-mcp>=0.4.0",
+    "httpx>=0.28.1",
 ]
 
 [dependency-groups]

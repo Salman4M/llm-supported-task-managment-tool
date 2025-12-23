@@ -10,6 +10,12 @@ class Settings(BaseSettings):
     JWT_ALGORITHM: str = "HS256"
     HEADER: str = "Bearer"
     REFRESH_TOKEN_LIFETIME_DAYS: int = 7
+    #ollama config
+    OLLAMA_BASE_URL: str
+    OLLAMA_MODEL: str
+    OLLAMA_TIMEOUT: int
+    OLLAMA_API_KEY: str
+
     # REDIS_PORT: int = 6379
     # REDIS_HOST: str = "localhost"
     # REDIS_HOST: str = "redis_service"

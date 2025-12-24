@@ -26,8 +26,8 @@ class User(Base):
     tasks = relationship("Task", back_populates="assigned_user")
     parent = relationship("User", remote_side=[id], backref="members")
     user_reports = relationship("UserReport", back_populates="user")
-    user_teams = relationship("Team", back_populates="team_members")
-
+    user_teams = relationship("Team",secondary="team_members", back_populates="team_members")
+    created_teams = relationship("Team", back_populates="creator")
 
 
 

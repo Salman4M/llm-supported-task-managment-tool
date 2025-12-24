@@ -3,6 +3,7 @@ from fastapi import FastAPI
 from fastapi_mcp import FastApiMCP
 from users.routes.routes_v1 import router as users_router
 from projects.routes.project_routes_v1 import router as projects_router
+from projects.routes.task_routes_v1 import router as tasks_router
 from reports.routes.routes_v1 import router as reports_router
 from teams.routes.routes_v1 import router as teams_router
 
@@ -24,6 +25,7 @@ app = FastAPI(title="LLM Task Manager")
 
 app.include_router(users_router, prefix="/users")
 app.include_router(projects_router, prefix="/projects")
+app.include_router(tasks_router, prefix="/tasks")
 app.include_router(reports_router, prefix="/reports")
 app.include_router(teams_router, prefix="/teams")
 

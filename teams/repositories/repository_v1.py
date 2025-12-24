@@ -10,7 +10,6 @@ from teams.schemas.schemas_v1 import TeamCreate, TeamUpdate
 
 class TeamRepository:
 
-    #CRUD
     def get_all(self, db: Session):
         return db.query(Team).all()
 
@@ -30,7 +29,7 @@ class TeamRepository:
                 .filter(User.id.in_(team.member_ids))
                 .all()
             )
-            db_team.members = members
+            db_team.team_members = members
 
         db.add(db_team)
         db.commit()
@@ -54,7 +53,7 @@ class TeamRepository:
                 .filter(User.id.in_(team.member_ids))
                 .all()
             )
-            db_team.members = members
+            db_team.team_members = members
 
         db.commit()
         db.refresh(db_team)
@@ -69,7 +68,6 @@ class TeamRepository:
         db.commit()
         return True
     
-    #Other
     def add_member(self, db: Session, team_id: UUID, user_id: UUID):
         team = db.query(Team).filter(Team.id == team_id).first()
         if not team:
@@ -79,10 +77,10 @@ class TeamRepository:
         if not user:
             raise HTTPException(404, "User not found")
 
-        if user in team.members:
+        if user in team.team_members:
             raise HTTPException(400, "User already in team")
 
-        team.members.append(user)
+        team.team_members.append(user)
         db.commit()
         db.refresh(team)
         return team
@@ -93,7 +91,7 @@ class TeamRepository:
         if not team:
             raise HTTPException(status_code=404, detail="Team not found")
 
-        return team.members
+        return team.team_members
 
     def get_user(self, db: Session, user_id: UUID):
         return db.query(User).filter(User.id == user_id).first()

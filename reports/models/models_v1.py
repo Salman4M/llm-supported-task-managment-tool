@@ -23,7 +23,7 @@ class UserReport(Base):
     id = Column(PGUUID(as_uuid=True), primary_key=True, default=uuid4)
     text = Column(Text, nullable=False)
     user_id = Column(PGUUID(as_uuid=True), ForeignKey("users.id"), nullable=False)
-    task_id = Column(ARRAY(Integer), nullable=True)  # List of task IDs
+    task_id = Column(ARRAY(Integer), nullable=True)  
     is_verified = Column(Boolean, default=False, nullable=False)
     created_at = Column(
         DateTime(timezone=True), server_default=func.now(), nullable=False

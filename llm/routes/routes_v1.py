@@ -139,7 +139,7 @@ async def analyze_task_status(
         ]
     }
     
-    analysis = await qwen_service.calculate_task_status_from_subtasks(task_data)
+    analysis = await qwen_service.calculate_task_status_from_subtask(task_data)
     
     analysis["current_status"] = task.status.value
     analysis["task_title"] = task.title

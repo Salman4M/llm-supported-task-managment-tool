@@ -68,9 +68,12 @@ class TeamService:
         if not team:
             raise HTTPException(status_code=404, detail="Team not found")
 
-        # current_user yoxlanışı: team lead olmalıdır
-        if current_user.role==UserRole.project_owner and current_user.role==UserRole.team_lead:
-            raise HTTPException(status_code=403, detail="Only team lead and project owner can add members")
+        # ✅ Fixed: Logic error - should be OR not AND
+        if current_user.role not in [UserRole.project_owner, UserRole.team_lead]:
+            raise HTTPException(
+                status_code=403, 
+                detail="Only team lead and project owner can add members"
+            )
 
         user = self.repo.get_user(db, user_id)
         if not user:
@@ -79,7 +82,10 @@ class TeamService:
         # Check if user is already a member using get_members
         members = self.get_members(db, current_user, team_id)
         if any(member.id == user_id for member in members):
-            raise HTTPException(status_code=400, detail="User is already a member of the team")
+            raise HTTPException(
+                status_code=400, 
+                detail="User is already a member of the team"
+            )
 
         return self.repo.add_member(db, team_id, user_id)
 
@@ -97,7 +103,10 @@ class TeamService:
 
         # Check if user is a member
         if user_id not in member_ids:
-            raise HTTPException(status_code=404, detail="User is not a member of the team")
+            raise HTTPException(
+                status_code=404, 
+                detail="User is not a member of the team"
+            )
 
         # Authorization
         if current_user.role == UserRole.project_owner:
@@ -109,11 +118,15 @@ class TeamService:
             if not user_to_delete:
                 raise HTTPException(status_code=404, detail="User not found in team")
             if user_to_delete.role in [UserRole.project_owner, UserRole.team_lead]:
-                raise HTTPException(status_code=403, detail="Team Lead cannot remove this user")
+                raise HTTPException(
+                    status_code=403, 
+                    detail="Team Lead cannot remove this user"
+                )
             self.repo.remove_member(db, team_id, user_id)
         else:
-            raise HTTPException(status_code=403, detail="Not allowed to remove members")
+            raise HTTPException(
+                status_code=403, 
+                detail="Not allowed to remove members"
+            )
 
         return {"detail": "Member removed successfully"}
-
-
